@@ -8,8 +8,11 @@
 import SwiftUI
 
 struct LogView: View {
-    @State private var username = ""
-    @State private var password = ""
+    @State private var username: String = ""
+    @State private var password: String = ""
+    
+    @State private var allowedLogin = true
+    
     
     var body: some View {
         VStack {
@@ -41,7 +44,13 @@ struct LogView: View {
             }
             .padding([.leading, .trailing],27.5)
             Spacer()
-            Button(action: {}) {
+            
+            Button(action: {
+                print("Logged In")
+                allowedLogin = false
+                
+                    
+            }) {
                 Text("Sign In")
                     .font(.headline)
                     .fontWeight(.heavy)
@@ -53,6 +62,12 @@ struct LogView: View {
                     .shadow( radius: 6, x:4, y: 4)
                     .shadow(radius: 6, x:-4, y: -4)
             }
+            // First check username is empty or not if empty returns true which means button .disabled gets true
+            // If username.isEmpty returns false then we have another condition to check if password is empty or not
+            // If password.isEmpty returns true then button .disabled gets true so you can't log in as the button is disabled
+            // If password.isEmpty returns false then we have another condition to check Whether the user has already logged in? as we only want this button to be functional only once
+            // so we have a variable named allowedLogin which is true in the beginning but once login is done becomes false so in this condition we negate the allowedLogin value
+            .disabled(username.isEmpty ? true : (password.isEmpty ? true : !allowedLogin))
             Spacer()
         }
         .background(LinearGradient(gradient: Gradient(colors: [.purple, .blue]), startPoint: .top, endPoint: .bottom).edgesIgnoringSafeArea(.all))
